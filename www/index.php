@@ -1,66 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>LAMP STACK</title>
-        <link rel="stylesheet" href="/assets/css/bulma.min.css">
-    </head>
-    <body>
-        <section class="hero is-medium is-info is-bold">
-            <div class="hero-body">
-                <div class="container has-text-centered">
-                    <h1 class="title">
-                        LAMP STACK
-                    </h1>
-                    <h2 class="subtitle">
-                        Your local development environment
-                    </h2>
-                </div>
-            </div>
-        </section>
-        <section class="section">
-            <div class="container">
-                <div class="columns">
-                    <div class="column">
-                        <h3 class="title is-3 has-text-centered">Environment</h3>
-                        <hr>
-                        <div class="content">
-                            <ul>
-                                <li><?= apache_get_version(); ?></li>
-                                <li>PHP <?= phpversion(); ?></li>
-                                <li>
-                                    <?php
-                                    $link = mysqli_connect("database", "root", $_ENV['MYSQL_ROOT_PASSWORD'], null);
+<?php
 
-/* check connection */
-                                    if (mysqli_connect_errno()) {
-                                        printf("MySQL connecttion failed: %s", mysqli_connect_error());
-                                    } else {
-                                        /* print server version */
-                                        printf("MySQL Server %s", mysqli_get_server_info($link));
-                                    }
-                                    /* close connection */
-                                    mysqli_close($link);
-                                    ?>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="column">
-                        <h3 class="title is-3 has-text-centered">Quick Links</h3>
-                        <hr>
-                        <div class="content">
-                            <ul>
-                                <li><a href="/phpinfo.php">phpinfo()</a></li>
-                                <li><a href="http://localhost:<? print $_ENV['PMA_PORT']; ?>">phpMyAdmin</a></li>
-                                <li><a href="/test_db.php">Test DB Connection with mysqli</a></li>
-                                <li><a href="/test_db_pdo.php">Test DB Connection with PDO</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </body>
+use Steampixel\Route;
+
+include 'static/vendor/Steampixel/Route.php';
+
+define('BASEPATH', '/');
+
+$uri = $_SERVER['REQUEST_URI'];
+
+?>
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>Schön wars 29.07.22</title>
+  <link href="static/css/style.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script src="static/js/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+  <header id="nav-wrapper">
+    <?php
+    include('templates/navigation/nav_basic.php');
+    ?>
+  </header>
+
+    <?php
+
+    Route::add('/', function () {
+      include('templates/home/main.php');
+    });
+
+    Route::add('/uploadImages', function () {
+      include('templates/gallery/upload_form.php');
+    }, 'get');
+
+    Route::add('/upload', function () {
+      include('templates/gallery/upload.php');
+    }, 'post');
+
+    Route::add('/pictureGallery', function () {
+      include('templates/gallery/photos.php');
+    });
+
+    Route::add('/rueckmeldung', function () {
+      $page = "from";
+      include('templates/forms/googleform.php');
+    });
+
+    Route::run(BASEPATH);
+
+    ?>
+  <footer>
+    <h3>Wünsche oder Fragen?</h3>
+    <div>
+      <a href="mailto:info@geli-und-micha-heiraten.de"><i class="far fa-envelope"></i></a>
+      <p>Dann schreib uns
+      </p>
+      <a href="mailto:info@geli-und-micha-heiraten.de">info@geli-und-micha-heiraten.de</a>
+    </div>
+  </footer>
+  <script src="static/js/navigation.js"></script>
+  <script src="static/js/easteregg.js"></script>
+  </div>
+</body>
+
 </html>
